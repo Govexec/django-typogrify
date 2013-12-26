@@ -3,7 +3,7 @@ import calendar
 from datetime import date, timedelta
 import smartypants as _smartypants
 
-from django import template
+from coffin import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
@@ -279,7 +279,6 @@ def widont(text):
     output = widont_finder.sub(r'\1&nbsp;\2', text)
     return output
 
-@register.filter
 def fuzzydate(value, cutoff=180):
     """
     * takes a value (date) and cutoff (in days)
@@ -349,8 +348,8 @@ def fuzzydate(value, cutoff=180):
 
         return template.defaultfilters.date(value, format)
 fuzzydate.is_safe = True
+register.filter(fuzzydate)
 
-@register.filter
 def super_fuzzydate(value):
     try:
         value = date(value.year, value.month, value.day)
@@ -423,8 +422,9 @@ def super_fuzzydate(value):
         # TODO add the past
         return fuzzydate(value)
 super_fuzzydate.is_safe = True
+register.filter(super_fuzzydate)
 
-@smart_filter
+@register.filter
 def typogrify(text):
     """The super typography filter
 

@@ -1,4 +1,5 @@
 import re
+import sys
 import calendar
 from datetime import date, timedelta
 import smartypants as _smartypants
@@ -444,6 +445,22 @@ def typogrify(text):
     text = caps(text)
     text = initial_quotes(text)
     text = number_suffix(text)
+
+    return text
+
+@register.filter
+def typogrify_without(text, *skips):
+
+    filters = [
+        "force_unicode", "amp", "widont", "smartypants", "caps",
+        "initial_quotes", "number_suffix",
+    ]
+
+    this_module = sys.modules[__name__]
+
+    for f in filters:
+        if f not in skips:
+            text = getattr(this_module, f)(text)
 
     return text
 

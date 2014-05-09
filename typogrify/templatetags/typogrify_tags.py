@@ -444,7 +444,7 @@ def typogrify(text):
     text = smartypants(text)
     text = caps(text)
     text = initial_quotes(text)
-    text = number_suffix(text)
+    # text = number_suffix(text)
 
     return text
 
